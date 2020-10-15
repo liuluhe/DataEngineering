@@ -20,5 +20,6 @@ ETL的部分是基于AWS Glue的一些依赖包，所以需要在Glue上运行�
 
 ## Jupyter Notebook版本的ETL逻辑
 逻辑和前面pyspark一致，Notebook版加了一些注解，此Notebook可以直接用于Glue 终端节点开发
+>ETL-logic-explain.ipynb
 
 
