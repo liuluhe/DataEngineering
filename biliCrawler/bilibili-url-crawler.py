@@ -21,7 +21,7 @@ prefix = 'data/danmu'
 def get_videos_stats(mid, n,batch):
     iterator = n/20 + 2
     for i in range(1, min(5,iterator)):
-        url = 'https://api.abc.com/x/space/arc/search?mid=%s&pn=%s&ps=20&jsonp=jsonp' % (mid, i)
+        url = 'https://api.bilibili.com/x/space/arc/search?mid=%s&pn=%s&ps=20&jsonp=jsonp' % (mid, i)
         r = requests.get(url, headers)
         result = {}
         text = json.loads(r.text)
@@ -29,7 +29,7 @@ def get_videos_stats(mid, n,batch):
         res = text['data']['list']['vlist']
         for item in res:
 
-            video_url = 'https://api.abc.com/x/web-interface/view?bvid=%s' %(item['bvid'])
+            video_url = 'https://api.bilibili.com/x/web-interface/view?bvid=%s' %(item['bvid'])
             rr = requests.get(video_url, headers)
             t = json.loads(rr.text)
             result['mid']=mid
@@ -52,7 +52,7 @@ def get_videos_stats(mid, n,batch):
            
  
 def get_danmu(cid,bv,mid):
-    danmu_url = 'https://api.abc.com/x/v1/dm/list.so?oid=%s' % (cid)
+    danmu_url = 'https://api.bilibili.com/x/v1/dm/list.so?oid=%s' % (cid)
     r = requests.get(danmu_url, headers)
     r.encoding='UTF-8'
 
@@ -67,14 +67,14 @@ def get_danmu(cid,bv,mid):
     
     
 def get_up_stats(mid,batch):
-    following_url = 'https://api.abc.com/x/relation/stat?vmid=%s&jsonp=jsonp' %(mid)
+    following_url = 'https://api.bilibili.com/x/relation/stat?vmid=%s&jsonp=jsonp' %(mid)
     result = {}
     r = requests.get(following_url, headers)
     text = json.loads(r.text)
     result['following']=text['data']['following']
     result['follower'] = text['data']['follower']
 
-    video_list_url = 'https://api.abc.com/x/space/arc/search?mid=%s&pn=1&ps=%s&jsonp=jsonp' % (mid, 1)
+    video_list_url = 'https://api.bilibili.com/x/space/arc/search?mid=%s&pn=1&ps=%s&jsonp=jsonp' % (mid, 1)
     r = requests.get(video_list_url, headers)
     text = json.loads(r.text)
     result['video_counts'] = text['data']['page']['count']
@@ -89,7 +89,7 @@ def get_up_stats(mid,batch):
 
     # crawling frequency is hourly
     result['crawl_date'] = batch
-    result['mid'] = mid # use https://space.abc.com/{mid} get to the main page
+    result['mid'] = mid # use https://space.bilibili.com/{mid} get to the main page
     put_to_stream(mid,owner_stats_stream_name,result)
     return result
 
