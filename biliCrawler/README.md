@@ -3,7 +3,8 @@
 爬取B站的频道信息和相应的视频信息，并做成数据管道最后通过Superset展示。其中用到AWS的服务Glue， Athena。目录包含了爬取代码和ETL的代码
 具体部署后的架构图如下：
 
-![image](https://github.com/liuluhe/DataEngineering/blob/master/assets/biliarchitect.png)
+![image](https://github.com/liuluhe/DataEngineering/raw/master/assets/biliarchitect.png)
+
 
 ## 爬取频道数据和视频数据
 运行 python 文件 bilibili-url-crawler.py 
