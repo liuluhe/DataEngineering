@@ -9,13 +9,17 @@
 
 ## 用Pyspark来做数据处理使数据可读性更好
 ETL的部分是基于AWS Glue的一些依赖包，所以需要在Glue上运行或者本地导入[Glue的包](https://docs.aws.amazon.com/zh_cn/glue/latest/dg/aws-glue-programming-etl-libraries.html)
-把JSON和时间分区的时间转化成parquet和mid分区方便查询
+
+**把JSON和时间分区的时间转化成parquet和mid分区方便查询**
 >video-stats-clean-ETL.py
+
 >channel-stats-clean-ETL.py 
-提取频道当前时间点的数据形成快照
+
+**提取频道当前时间点的数据形成快照**
 >channel-stats-latest-ETL.py
 
 ## Jupyter Notebook版本的ETL逻辑
 逻辑和前面pyspark一致，Notebook版加了一些注解，此Notebook可以直接用于Glue 终端节点开发
+>ETL-logic-explain.ipynb
 
 
