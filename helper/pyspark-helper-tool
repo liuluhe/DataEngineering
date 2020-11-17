@@ -1,0 +1,68 @@
+# pyspark常用代码
+
+
+# AWS Glue相关的库
+import sys
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext, SparkConf
+from awsglue.context import GlueContext
+from awsglue.job import Job
+import time
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+
+# Glue自定义JDBC连入MySQL8
+args = getResolvedOptions(sys.argv,['tablename','dbuser','dbpassword','dburl','jdbcS3path','s3OutputPath'])
+
+connection_mysql8_options = {
+    "url": args['dburl'],
+    "dbtable": args['tablename'],
+    "user": args['dbuser'],
+    "password": args['dbpassword'],
+    "customJdbcDriverS3Path": args['jdbcS3path']+"mysql-connector-java-8.0.18.jar", #先编译jdbc jar 传到S3
+    "customJdbcDriverClassName": "com.mysql.cj.jdbc.Driver"}
+# 从MySQL中读取数据
+df_catalog = glueContext.create_dynamic_frame.from_options(connection_type="mysql",connection_options=connection_mysql8_options)
+
+#加上filter 一般增量加载可以按照更新时间来过滤
+df_filter = Filter.apply(frame = df_catalog, f = lambda x: x["cs_sold_date_sk"] >=2452539)
+#使用Glue方式写入s3位置
+writer = glueContext.write_dynamic_frame.from_options(frame = df_filter, connection_type = "s3", connection_options = {"path": args['s3OutputPath']+args['tablename']}, format = "parquet")
+
+# 使用Spark原生方法读取数据
+#read csv
+datasource0 = spark.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").load('s3://xxxxx')
+#read parquet
+datasource0 = spark.read.parquet('s3://xxxxx')
+
+# 使用Glue方式读取数据
+datasource0 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "output", transformation_ctx = "datasource0")
+
+# DynamicFrame和dataframe相互转化
+df = datasource0.toDF() # convert to dataframe
+new_df = from_DF(df,glueContext,new_df) # convert to dynamicdataframe
+
+# 使用Glue方式写数据
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = new_df, connection_type = "s3", connection_options = {"path": "s3://xxxx/", "partitionKeys": ["date"]}, format = "parquet", transformation_ctx = "datasink4")
+
+
+# 使用Spark原生方式写数据
+datasource0.coalesce(n).write.format('csv').mode("append").partitionBy('date').save("s3://xxxxx/")
+datasource0.write.mode('overwrite').parquet(output_s3+wt)
+
+# 使用UDF转化
+from pyspark.sql.functions import UserDefinedFunction as udf
+def mergeArray(x):
+    for i in x:
+        if i is not None:
+            return i
+    return None
+
+choiceOneString =udf(lambda x:mergeArray(x),StringType()) 
+choiceOneDouble =udf(lambda x:mergeArray(x),DoubleType()) 
+
+# 使用Spark SQL来处理数据
+df=spark.sql("select * from schema.table_name")
