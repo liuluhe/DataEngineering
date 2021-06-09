@@ -11,7 +11,9 @@ AWS Glue Catalog
 
 ## 下载Apache Atlas启动脚本
 以上CLI安装Atlas主要靠的是参数--steps中的启动脚本，启动脚本是以下文件
+
 >apache-atlas2-emr.sh
+
 请把这个脚本放到Amazon S3中并开放公网访问。这样S3就会给这个文件生成一个https地址如
 https://xxx.s3.cn-northwest-1.amazonaws.com.cn/apache-atlas2-emr.sh
 需要把这个地址填入以下的CLI中--steps 中
