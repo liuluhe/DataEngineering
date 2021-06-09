@@ -1,0 +1,27 @@
+[
+  {
+    "Classification": "hbase-site",
+    "Properties": {
+      "hbase.coprocessor.master.classes": "org.apache.atlas.hbase.hook.HBaseAtlasCoprocessor"
+    }
+  },
+  {
+    "Classification": "hive-site",
+    "Properties": {
+      "hive.exec.post.hooks": "org.apache.atlas.hive.hook.HiveHook",
+      "hive.metastore.client.factory.class":"com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+    }
+  },
+  {
+    "Classification": "spark-hive-site",
+    "Properties": {
+      "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+    }
+  },
+  {
+    "Classification": "hiveserver2-site",
+    "Properties": {
+      "hive.exec.post.hooks": "org.apache.atlas.hive.hook.HiveHook"
+    }
+  }
+]
