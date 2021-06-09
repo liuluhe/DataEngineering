@@ -166,4 +166,4 @@ group by cs_warehouse_sk;
 http://<EMR master DNS>:21000
 用户名和密码都是admin
 
-https://github.com/liuluhe/DataEngineering/blob/master/assets/atlasdatalineage.png
+![image](https://github.com/liuluhe/DataEngineering/blob/master/assets/atlasdatalineage.png)
