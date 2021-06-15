@@ -160,6 +160,22 @@ from default.catalog_sales
 group by cs_warehouse_sk;
 ```
 
+**测试Hbase的元数据同步**
+使用hbase shell进入Hbase控制台运行
+```SQL
+create 'emp', 'personal data', 'professional data'
+put 'emp','1','personal data:name','Jack'
+put 'emp','1','personal data:city','Denver'
+put 'emp','1','professional data:designation','Manager'
+put 'emp','1','professional data:salary','30000'
+
+put 'emp','2','personal data:name','Mary'
+put 'emp','2','personal data:city','Irvine'
+put 'emp','2','professional data:designation','CI'
+put 'emp','2','professional data:salary','10000'
+put 'emp','2','professional data:phone','123456'
+```
+
 **登录Atlas查看数据血缘**
 
 使用EMR主节点的公有域名登录Atlas
