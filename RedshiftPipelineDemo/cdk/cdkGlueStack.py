@@ -25,9 +25,6 @@ class RSGlueJob (core.Stack):
         )
         glue_job_role.add_to_policy(policy_statement)
 
-
-
-
         job = glue.CfnJob(
             self,
             "glue-redshift-job",
@@ -51,3 +48,6 @@ class RSGlueJob (core.Stack):
                 python_version = "3"
             )
         )
+
+class SparkGlueJob(core.Stack):
+    
