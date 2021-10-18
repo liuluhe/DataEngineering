@@ -1,0 +1,680 @@
+{
+  "Resources": {
+    "GlueJobRoleDemo41402B6E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "glue.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/Glue-Job-Role-Demo/Resource"
+      }
+    },
+    "GlueJobRoleDemoDefaultPolicyDE6F2BF0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:*",
+                "s3:*",
+                "ec2:*",
+                "iam:*",
+                "cloudwatch:*",
+                "dynamodb:*",
+                "glue:*",
+                "redshift:*",
+                "redshift-data:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GlueJobRoleDemoDefaultPolicyDE6F2BF0",
+        "Roles": [
+          {
+            "Ref": "GlueJobRoleDemo41402B6E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/Glue-Job-Role-Demo/DefaultPolicy/Resource"
+      }
+    },
+    "redshiftcreatereportingtable": {
+      "Type": "AWS::Glue::Job",
+      "Properties": {
+        "Command": {
+          "Name": "pythonshell",
+          "PythonVersion": "3",
+          "ScriptLocation": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/glue_script/gluejob_redshiftSQL.py"
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "GlueJobRoleDemo41402B6E",
+            "Arn"
+          ]
+        },
+        "DefaultArguments": {
+          "--dbname": "dev",
+          "--username": "awsuser",
+          "--password": "Admin1234",
+          "--host": "",
+          "--port": 5179,
+          "--cluster_id": "redshift-benchmark",
+          "--sql_script_bucket": {
+            "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+          },
+          "--sql_script_key": "redshift_script/01-createReporting.sql",
+          "--extra-py-files": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/boto3-depends.zip"
+              ]
+            ]
+          }
+        },
+        "MaxCapacity": 0.0625,
+        "Name": "redshift-create-reporting-table",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/redshift-create-reporting-table"
+      }
+    },
+    "redshiftdeltaloadreporting": {
+      "Type": "AWS::Glue::Job",
+      "Properties": {
+        "Command": {
+          "Name": "pythonshell",
+          "PythonVersion": "3",
+          "ScriptLocation": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/glue_script/gluejob_redshiftSQL.py"
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "GlueJobRoleDemo41402B6E",
+            "Arn"
+          ]
+        },
+        "DefaultArguments": {
+          "--dbname": "dev",
+          "--username": "awsuser",
+          "--password": "Admin1234",
+          "--host": "",
+          "--port": 5179,
+          "--cluster_id": "redshift-benchmark",
+          "--sql_script_bucket": {
+            "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+          },
+          "--sql_script_key": "redshift_script/02-deltaLoad.sql",
+          "--extra-py-files": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/boto3-depends.zip"
+              ]
+            ]
+          }
+        },
+        "MaxCapacity": 0.0625,
+        "Name": "redshift-deltaload-reporting",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/redshift-deltaload-reporting"
+      }
+    },
+    "redshiftfullloadreturn": {
+      "Type": "AWS::Glue::Job",
+      "Properties": {
+        "Command": {
+          "Name": "pythonshell",
+          "PythonVersion": "3",
+          "ScriptLocation": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/glue_script/gluejob_redshiftSQL.py"
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "GlueJobRoleDemo41402B6E",
+            "Arn"
+          ]
+        },
+        "DefaultArguments": {
+          "--dbname": "dev",
+          "--username": "awsuser",
+          "--password": "Admin1234",
+          "--host": "",
+          "--port": 5179,
+          "--cluster_id": "redshift-benchmark",
+          "--sql_script_bucket": {
+            "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+          },
+          "--sql_script_key": "redshift_script/02-fullLoadReturn.sql",
+          "--extra-py-files": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/boto3-depends.zip"
+              ]
+            ]
+          }
+        },
+        "MaxCapacity": 0.0625,
+        "Name": "redshift-fullload-return",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/redshift-fullload-return"
+      }
+    },
+    "redshiftcleanup": {
+      "Type": "AWS::Glue::Job",
+      "Properties": {
+        "Command": {
+          "Name": "pythonshell",
+          "PythonVersion": "3",
+          "ScriptLocation": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/glue_script/gluejob_redshiftSQL.py"
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "GlueJobRoleDemo41402B6E",
+            "Arn"
+          ]
+        },
+        "DefaultArguments": {
+          "--dbname": "dev",
+          "--username": "awsuser",
+          "--password": "Admin1234",
+          "--host": "",
+          "--port": 5179,
+          "--cluster_id": "redshift-benchmark",
+          "--sql_script_bucket": {
+            "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+          },
+          "--sql_script_key": "redshift_script/03-cleanUp.sql",
+          "--extra-py-files": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/boto3-depends.zip"
+              ]
+            ]
+          }
+        },
+        "MaxCapacity": 0.0625,
+        "Name": "redshift-cleanup",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/redshift-cleanup"
+      }
+    },
+    "timechecker": {
+      "Type": "AWS::Glue::Job",
+      "Properties": {
+        "Command": {
+          "Name": "pythonshell",
+          "PythonVersion": "3",
+          "ScriptLocation": {
+            "Fn::Join": [
+              "",
+              [
+                "s3://",
+                {
+                  "Fn::ImportValue": "s3-assets:ExportsOutputRefS3demoEEC5AD8352AF8D05"
+                },
+                "/glue_script/time_check.py"
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "GlueJobRoleDemo41402B6E",
+            "Arn"
+          ]
+        },
+        "MaxCapacity": 0.0625,
+        "Name": "time-checker",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/time-checker"
+      }
+    },
+    "quarterlycatalogreportingpipeline": {
+      "Type": "AWS::Glue::Workflow",
+      "Properties": {
+        "Description": "Quarterly report pipeline for catalog sales",
+        "Name": "quarterly-catalog-reporting",
+        "Tags": {
+          "project": "redshift-demo"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/quarterly-catalog-reporting-pipeline"
+      }
+    },
+    "starttrigger": {
+      "Type": "AWS::Glue::Trigger",
+      "Properties": {
+        "Actions": [
+          {
+            "JobName": "redshift-create-reporting-table"
+          },
+          {
+            "JobName": "redshift-fullload-return"
+          }
+        ],
+        "Type": "ON_DEMAND",
+        "Description": "Start the workflow, will be quarterly scheduled",
+        "Name": "start-redshift-demo",
+        "Tags": {
+          "project": "redshift-demo"
+        },
+        "WorkflowName": "quarterly-catalog-reporting"
+      },
+      "DependsOn": [
+        "redshiftcreatereportingtable",
+        "redshiftfullloadreturn"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/start-trigger"
+      }
+    },
+    "deltatrigger": {
+      "Type": "AWS::Glue::Trigger",
+      "Properties": {
+        "Actions": [
+          {
+            "JobName": "redshift-deltaload-reporting"
+          }
+        ],
+        "Type": "CONDITIONAL",
+        "Description": "Based on create DDL completion start incremental data load",
+        "Name": "delta-load-trigger",
+        "Predicate": {
+          "Conditions": [
+            {
+              "JobName": "redshift-create-reporting-table",
+              "LogicalOperator": "EQUALS",
+              "State": "SUCCEEDED"
+            },
+            {
+              "JobName": "time-checker",
+              "LogicalOperator": "EQUALS",
+              "State": "SUCCEEDED"
+            }
+          ],
+          "Logical": "AND"
+        },
+        "Tags": {
+          "project": "redshift-demo"
+        },
+        "WorkflowName": "quarterly-catalog-reporting"
+      },
+      "DependsOn": [
+        "redshiftdeltaloadreporting",
+        "timechecker"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/delta-trigger"
+      }
+    },
+    "timetrigger": {
+      "Type": "AWS::Glue::Trigger",
+      "Properties": {
+        "Actions": [
+          {
+            "JobName": "redshift-deltaload-reporting"
+          }
+        ],
+        "Type": "CONDITIONAL",
+        "Description": "Based on time checker start incremental data load",
+        "Name": "time-trigger",
+        "Predicate": {
+          "Conditions": [
+            {
+              "JobName": "redshift-fullload-return",
+              "LogicalOperator": "EQUALS",
+              "State": "SUCCEEDED"
+            }
+          ],
+          "Logical": "ANY"
+        },
+        "Tags": {
+          "project": "redshift-demo"
+        },
+        "WorkflowName": "quarterly-catalog-reporting"
+      },
+      "DependsOn": [
+        "redshiftdeltaloadreporting",
+        "timechecker"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/time-trigger"
+      }
+    },
+    "cleanup": {
+      "Type": "AWS::Glue::Trigger",
+      "Properties": {
+        "Actions": [
+          {
+            "JobName": "redshift-cleanup"
+          }
+        ],
+        "Type": "CONDITIONAL",
+        "Description": "Clean up the return table",
+        "Name": "clean-trigger",
+        "Predicate": {
+          "Conditions": [
+            {
+              "JobName": "redshift-deltaload-reporting",
+              "LogicalOperator": "EQUALS",
+              "State": "SUCCEEDED"
+            }
+          ],
+          "Logical": "ANY"
+        },
+        "Tags": {
+          "project": "redshift-demo"
+        },
+        "WorkflowName": "quarterly-catalog-reporting"
+      },
+      "DependsOn": [
+        "redshiftcleanup",
+        "redshiftdeltaloadreporting"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/cleanup"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWMwQqDMBBEv8V7XKul0N4K3noSW+jZxmi3xixsEkRC/r1GT/NmhpkSyuoCp+zeLTaX/VQESawgPF0nJ1GTsY69dKIeTKsseZYq8Vb06JBMFGkYsJshtKT3cteGNMo12YOiGLXfjrfgQZ+Uv4mnQdOS+MU4jopjjKJZ3ZdMcYYr3LKfRczZG4ezgvbQP3WMCjKzAAAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "Redshift-reporting-pipeline/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
