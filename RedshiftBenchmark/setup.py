@@ -6,7 +6,7 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="RedshiftPipelineDemo",
+    name="redshift_benchmark",
     version="0.0.1",
 
     description="An empty CDK Python app",
@@ -15,11 +15,11 @@ setuptools.setup(
 
     author="author",
 
-    package_dir={"": "lib"},
-    packages=setuptools.find_packages(where="lib"),
+    package_dir={"": "redshift_benchmark"},
+    packages=setuptools.find_packages(where="redshift_benchmark"),
 
     install_requires=[
-        "aws-cdk.core==1.102.0",
+        "aws-cdk.core==1.125.0",
     ],
 
     python_requires=">=3.6",
