@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2021-08-04T10:51:45.227Z" agent="5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36" etag="FiadoXkpHcEh6u5UxXBD" version="14.9.4" type="github">
+  <diagram name="Page-1" id="c7488fd3-1785-93aa-aadb-54a6760d102a">
+    <mxGraphModel dx="786" dy="475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="aWNVzCClKE4BJLjwkwab-73" value="User Login Process" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="290" y="180" width="680" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-75" value="User" style="swimlane;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry x="170" y="20" width="170" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-82" value="Get IAM User Name and Password&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-75">
+          <mxGeometry x="30" y="93" width="120" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-76" value="Registration" style="swimlane;horizontal=0;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry y="43" width="680" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-92" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="aWNVzCClKE4BJLjwkwab-76" source="aWNVzCClKE4BJLjwkwab-81" target="aWNVzCClKE4BJLjwkwab-84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-81" value="Create IAM User" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-76">
+          <mxGeometry x="30" y="7" width="50" height="63" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-90" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="aWNVzCClKE4BJLjwkwab-76" source="aWNVzCClKE4BJLjwkwab-84" target="aWNVzCClKE4BJLjwkwab-89">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-84" value="Configure Permission" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-76">
+          <mxGeometry x="100" y="7" width="50" height="63" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-89" value="Grant Table/Column/Row Permission" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-76">
+          <mxGeometry x="360" y="22" width="140" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-77" value="Login &amp; Athentication" style="swimlane;horizontal=0;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry y="163" width="680" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-94" value="Get IAM User Name and Password&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-77">
+          <mxGeometry x="195" y="17" width="120" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-74" value="Admin" style="swimlane;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry y="20" width="170" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-78" value="Lakeformation" style="swimlane;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry x="340" y="20" width="170" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-79" value="Athena" style="swimlane;" vertex="1" parent="aWNVzCClKE4BJLjwkwab-73">
+          <mxGeometry x="510" y="20" width="170" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="aWNVzCClKE4BJLjwkwab-73" source="aWNVzCClKE4BJLjwkwab-89" target="aWNVzCClKE4BJLjwkwab-82">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="aWNVzCClKE4BJLjwkwab-80" value="Login &amp; Athentication" style="swimlane;horizontal=0;" vertex="1" parent="1">
+          <mxGeometry x="290" y="473" width="680" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
